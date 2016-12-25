@@ -4,16 +4,20 @@
 // };
 
 // But instead we're going to implement it from scratch:
+
 var getElementsByClassName = function(className) {
-  var result = [];
-  var searchNodes = function(node) {
-    if (node.classList !== undefined && node.classList.contains(className)) {
-      result.push(node);
-    } 
-    for (var i = 0; i < node.childNodes.length; i++) {
-      searchNodes(node.childNodes[i]);
+  var elements = [];
+  var searchDom = function(node) {
+    if (Array.prototype.includes.call(node.classList, className)) {
+      elements.push(node);
     }
-  };
-  searchNodes(document.body);
-  return result;
+    for (var i = 0; i < node.childNodes.length; i++) {
+      if (!!node.childNodes[i].classList) {
+        searchDom(node.childNodes[i]);
+      }
+    }
+  }
+
+  searchDom(document.body);
+  return elements;
 };
